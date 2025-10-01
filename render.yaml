@@ -9,6 +9,7 @@ services:
         previewValue: "https://your-supabase-project.supabase.co"
       - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
         previewValue: "your-anon-public-api-key"
+      # Provide your Supabase service role key manually in Render after provisioning.
       - key: SUPABASE_SERVICE_ROLE_KEY
-        generateValue: true
+        sync: false
         previewValue: "optional-service-role-key"
