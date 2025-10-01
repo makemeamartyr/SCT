@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import supabaseClient from "@/lib/supabaseClient";
+import { getSupabaseClient, SupabaseConfigurationError } from "@/lib/supabaseClient";
 
 interface CheckResult {
   status: "idle" | "loading" | "success" | "error";
@@ -21,7 +21,8 @@ export default function HomePage() {
   const runBrowserCheck = useCallback(async () => {
     setBrowserCheck({ status: "loading", message: "Validating Supabase session from the browser..." });
     try {
-      const { data, error } = await supabaseClient.auth.getSession();
+      const client = getSupabaseClient();
+      const { data, error } = await client.auth.getSession();
       if (error) {
         throw error;
       }
@@ -34,6 +35,14 @@ export default function HomePage() {
           : "Browser client connected successfully; no active session was found (expected for anonymous checks).",
       });
     } catch (error) {
+      if (error instanceof SupabaseConfigurationError) {
+        setBrowserCheck({
+          status: "error",
+          message: "Supabase client configuration is incomplete.",
+          details: error.message,
+        });
+        return;
+      }
       setBrowserCheck({
         status: "error",
         message: "Browser client failed to connect to Supabase.",
