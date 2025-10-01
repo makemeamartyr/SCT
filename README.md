@@ -49,10 +49,11 @@ Supabase connectivity toolkit scaffolded with Next.js App Router. It provides bo
 ### Render (Static + Server)
 
 1. Create a new **Web Service** in Render pointing to this repository.
-2. Use the build command `npm install && npm run build` and the start command `npm run start`.
+2. Use the **Node** runtime with the build command `npm install && npm run build` and the start command `npm run start` so Render executes the same scripts defined in `package.json`.
 3. Add the same environment variables (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, optional `SUPABASE_SERVICE_ROLE_KEY`) under **Environment**. Render will prompt you for the service-role key after the service is provisioned because it is not auto-synced from `render.yaml`.
-4. Trigger a deploy. Render will host the Next.js server; ensure you select a Node-compatible runtime (Node 18+). Keep the service-role key scoped to server-side secrets only—never expose it to browser or client-side environments.
-
+4. If you manage the service through `render.yaml`, push the updated blueprint and redeploy so Render recreates the service with the Node runtime and the commands above.
+5. Trigger a fresh deploy. Confirm that `.next/BUILD_ID` is generated during `next build` and that `next start` boots successfully—Render will surface these steps in the deploy logs.
+ 
 > ℹ️ Only the anon/public key should ever reach the browser. Keep the service-role key restricted to server environments and secret stores.
 
 ## Scripts
