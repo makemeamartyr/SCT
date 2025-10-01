@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "SCT Supabase Diagnostics",
-  description: "Connectivity diagnostics for Supabase",
+  title: "Supply Chain Toolkit",
+  description: "Authenticated console for operations and configuration",
 };
 
 export default function RootLayout({
