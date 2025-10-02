@@ -1,4 +1,6 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+
+import type { Database } from "./database.types";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -11,13 +13,13 @@ if (!supabaseAnonKey) {
   throw new Error("Missing NEXT_PUBLIC_SUPABASE_ANON_KEY environment variable.");
 }
 
-const client = createClient(supabaseUrl, supabaseAnonKey, {
+const client = createClient<Database>(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
   },
 });
 
-export const supabaseClient = client;
+export const supabaseClient: SupabaseClient<Database> = client;
 
 export default supabaseClient;

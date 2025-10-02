@@ -7,9 +7,11 @@ import {
   useState,
 } from "react";
 import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
-import type { Session } from "@supabase/supabase-js";
+import type { Session, SupabaseClient } from "@supabase/supabase-js";
 
-export type BrowserSupabaseClient = ReturnType<typeof createPagesBrowserClient>;
+import type { Database } from "./database.types";
+
+export type BrowserSupabaseClient = SupabaseClient<Database>;
 
 interface SupabaseContextValue {
   supabaseClient: BrowserSupabaseClient;
@@ -42,7 +44,7 @@ export function SupabaseProvider({
 }: SupabaseProviderProps) {
   const [client] = useState<BrowserSupabaseClient>(() =>
     supabaseClient ??
-    createPagesBrowserClient({
+    createPagesBrowserClient<Database>({
       supabaseUrl,
       supabaseKey: supabaseAnonKey,
     }),
