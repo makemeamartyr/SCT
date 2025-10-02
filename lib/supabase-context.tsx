@@ -7,11 +7,28 @@ import {
   useState,
 } from "react";
 import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
-import type { Session, SupabaseClient } from "@supabase/supabase-js";
+import type { Session } from "@supabase/supabase-js";
 
 import type { Database } from "./database.types";
 
-export type BrowserSupabaseClient = SupabaseClient<Database>;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error(
+    "Missing Supabase environment variables. Ensure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are set.",
+  );
+}
+
+export const createBrowserSupabaseClient = () =>
+  createPagesBrowserClient<Database>({
+    supabaseUrl,
+    supabaseKey: supabaseAnonKey,
+  });
+
+export type BrowserSupabaseClient = ReturnType<
+  typeof createBrowserSupabaseClient
+>;
 
 interface SupabaseContextValue {
   supabaseClient: BrowserSupabaseClient;
@@ -28,26 +45,13 @@ interface SupabaseProviderProps {
   supabaseClient?: BrowserSupabaseClient;
 }
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error(
-    "Missing Supabase environment variables. Ensure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are set.",
-  );
-}
-
 export function SupabaseProvider({
   children,
   initialSession,
   supabaseClient,
 }: SupabaseProviderProps) {
   const [client] = useState<BrowserSupabaseClient>(() =>
-    supabaseClient ??
-    createPagesBrowserClient<Database>({
-      supabaseUrl,
-      supabaseKey: supabaseAnonKey,
-    }),
+    supabaseClient ?? createBrowserSupabaseClient(),
   );
   const [session, setSession] = useState<Session | null>(initialSession);
 
