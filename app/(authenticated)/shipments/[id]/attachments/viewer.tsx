@@ -2,7 +2,8 @@
 
 import { useCallback, useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useSessionContext } from "@supabase/auth-helpers-react";
+
+import { useSupabaseContext } from "@/lib/supabase-context";
 
 interface Attachment {
   id: string;
@@ -17,7 +18,7 @@ interface AttachmentManagerProps {
 }
 
 export function AttachmentManager({ shipmentId }: AttachmentManagerProps) {
-  const { supabaseClient } = useSessionContext();
+  const { supabaseClient } = useSupabaseContext();
   const queryClient = useQueryClient();
   const [uploading, setUploading] = useState(false);
 
