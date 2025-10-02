@@ -7,10 +7,12 @@ import {
   useState,
 } from "react";
 import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
-import type { Session, SupabaseClient } from "@supabase/supabase-js";
+import type { Session } from "@supabase/supabase-js";
+
+export type BrowserSupabaseClient = ReturnType<typeof createPagesBrowserClient>;
 
 interface SupabaseContextValue {
-  supabaseClient: SupabaseClient;
+  supabaseClient: BrowserSupabaseClient;
   session: Session | null;
 }
 
@@ -21,7 +23,7 @@ const SupabaseContext = createContext<SupabaseContextValue | undefined>(
 interface SupabaseProviderProps {
   children: ReactNode;
   initialSession: Session | null;
-  supabaseClient?: SupabaseClient;
+  supabaseClient?: BrowserSupabaseClient;
 }
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -38,7 +40,7 @@ export function SupabaseProvider({
   initialSession,
   supabaseClient,
 }: SupabaseProviderProps) {
-  const [client] = useState<SupabaseClient>(() =>
+  const [client] = useState<BrowserSupabaseClient>(() =>
     supabaseClient ??
     createPagesBrowserClient({
       supabaseUrl,
