@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { useSessionContext } from "@supabase/auth-helpers-react";
+
+import { useSupabaseContext } from "@/lib/supabase-context";
 
 interface NotificationPreferencesFormProps {
   initialPreferences: {
@@ -12,7 +13,7 @@ interface NotificationPreferencesFormProps {
 }
 
 export function NotificationPreferencesForm({ initialPreferences }: NotificationPreferencesFormProps) {
-  const { supabaseClient } = useSessionContext();
+  const { supabaseClient } = useSupabaseContext();
   const [email, setEmail] = useState(initialPreferences.email);
   const [sms, setSms] = useState(initialPreferences.sms);
   const [slackWebhook, setSlackWebhook] = useState(initialPreferences.slackWebhook);

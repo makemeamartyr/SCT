@@ -2,7 +2,8 @@
 
 import { useEffect, useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useSessionContext } from "@supabase/auth-helpers-react";
+
+import { useSupabaseContext } from "@/lib/supabase-context";
 
 interface EtaBucket {
   eta_window: string;
@@ -27,7 +28,7 @@ async function fetchEtaBuckets(supabaseUrl: string, accessToken: string) {
 }
 
 export function EtaMonitor() {
-  const { supabaseClient } = useSessionContext();
+  const { supabaseClient } = useSupabaseContext();
   const queryClient = useQueryClient();
   const supabaseUrl = useMemo(() => process.env.NEXT_PUBLIC_SUPABASE_URL, []);
 

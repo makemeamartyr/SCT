@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useSessionContext } from "@supabase/auth-helpers-react";
+
+import { useSupabaseContext } from "@/lib/supabase-context";
 
 interface TimelineEvent {
   id: string;
@@ -32,7 +33,7 @@ interface ShipmentTimelineProps {
 }
 
 export function ShipmentTimeline({ shipmentId }: ShipmentTimelineProps) {
-  const { supabaseClient } = useSessionContext();
+  const { supabaseClient } = useSupabaseContext();
   const [accessToken, setAccessToken] = useState<string | null>(null);
 
   useEffect(() => {
