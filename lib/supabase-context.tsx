@@ -6,7 +6,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import { createBrowserClient } from "@supabase/auth-helpers-nextjs";
+import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 import type { Session, SupabaseClient } from "@supabase/supabase-js";
 
 interface SupabaseContextValue {
@@ -39,7 +39,11 @@ export function SupabaseProvider({
   supabaseClient,
 }: SupabaseProviderProps) {
   const [client] = useState<SupabaseClient>(() =>
-    supabaseClient ?? createBrowserClient(supabaseUrl, supabaseAnonKey),
+    supabaseClient ??
+    createPagesBrowserClient({
+      supabaseUrl,
+      supabaseKey: supabaseAnonKey,
+    }),
   );
   const [session, setSession] = useState<Session | null>(initialSession);
 
