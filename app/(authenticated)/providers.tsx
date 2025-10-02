@@ -3,10 +3,13 @@
 import type { ReactNode } from "react";
 import { useState } from "react";
 import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
-import type { Session, SupabaseClient } from "@supabase/supabase-js";
+import type { Session } from "@supabase/supabase-js";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import { SupabaseProvider } from "@/lib/supabase-context";
+import {
+  SupabaseProvider,
+  type BrowserSupabaseClient,
+} from "@/lib/supabase-context";
 
 interface ProvidersProps {
   children: ReactNode;
@@ -23,7 +26,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
 }
 
 export function Providers({ children, initialSession }: ProvidersProps) {
-  const [supabase] = useState<SupabaseClient>(() =>
+  const [supabase] = useState<BrowserSupabaseClient>(() =>
     createPagesBrowserClient({ supabaseUrl, supabaseKey: supabaseAnonKey }),
   );
   const [queryClient] = useState(() => new QueryClient());
